@@ -3,7 +3,7 @@
 let speedRates = [0.25, 0.5, 1, 1.5, 2];
 
 let myPlayer = videojs('my-video', {
-    playbackRates: speedRates
+    playbackRates: speedRates,
 });
 
 //2) Запись и воспроизведение с последнего сохраненного места. 
@@ -14,26 +14,21 @@ function playFromLastPlace() {
     });
     
     myPlayer.currentTime(localStorage.getItem('lastRecordedTime'));
-};
+}
 playFromLastPlace();
 
-//3) Preview on scroll. Используется videojs.thumbnails.js. 
-// Реализовано только отображение preview. Создание 
-// Нарезаются кадры (на бэкенде) через определенную периоды времени и в скрипте 
-// задается их отображение, например, каждые 30 секунд 
+//3) Preview on scroll. Используется videojs-sprite-thumbnails.js. 
 function previewOnScroll() {
-    const myVideo = document.querySelector('video');
-    myVideo.onloadedmetadata = function b() {
-        let videoDuration = myVideo.duration;
-        let timeToImage = {}; //json хранит период отображения соответствующей preview image
-        let intervalThumbs = 30;
-        for (let i = 0; i < videoDuration; i += intervalThumbs) {
-            timeToImage[i] = {
-                src: `c${i/intervalThumbs}.png`
-            }
-        }
-        myPlayer.thumbnails(timeToImage);
-    };
-};
+    myPlayer.spriteThumbnails({
+          interval: 5,
+          url: './media/thumbnails/80p-00001.jpg',
+          width: 142,
+          height: 80
+    });
+}
 
 previewOnScroll();
+
+
+
+
